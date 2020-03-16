@@ -1,84 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="index.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="index.css" />
     <title>Image Loader</title>
-   
-</head>
-<body>
+  </head>
+  <body>
     <div id="drop-Area">
-        
-        <form> 
-            Upload or drag photos from your computer
-			<input type="file" id="filename" multiple accept="image/*" onchange="handleFiles(this.files)"/>
-			<div id="filedrag">
-				Drop files
-			</div>         
-       
-       
-        
-    </form>
-        <div id="display"><img id="displayImg" src="" width="200px"/></div>
+      <form>
+        Upload or drag photos from your computer
+        <input
+          type="file"
+          id="filename"
+          multiple
+          accept="image/*"
+          onchange="handleFiles(this.files)"
+        />
+        <div id="filedrag">
+          Drop files
+        </div>
+      </form>
+      <div>
+        <ol id="listimages"></ol>
+      </div>
+
+      <div>
+        <button type="submit" id="upload_button">
+          Upload
+        </button>
+      </div>
     </div>
+    <div id="display"></div>
 
-
-    <script>
-   
-      
-            
-
-        // var imgDisplay =document.getElementById('display');
-        // imgDisplay.src =  URL.createObjectURL(event.target.files[0]);
-        
-        var dropRegion = document.getElementById("drop-Area")
-        dropRegion.addEventListener("dragenter" ,preventDefault , false)
-        dropRegion.addEventListener("dragleave" ,preventDefault , false)
-        dropRegion.addEventListener("dragover" ,preventDefault , false)
-        dropRegion.addEventListener("drop" ,preventDefault , false)
-        dropRegion.addEventListener("drop" ,handleDrop ,false)
-
-   
-
-    function preventDefault(e){
-        e.preventDefault();
-        e.stopPropogation();
-       
-    }
-
-    function handleDrop(e){
-        var dt = e.dataTransfer
-        var files = dt.files
-        console.log(files)
-        handleFiles(files)
-    }
-
-    function handleFiles(files){
-       files = [...files]
-       files.forEach(file => {
-            let reader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onloadend =function(){
-                var img =document.getElementById("displayImg")
-                
-                img.src =reader.result
-                
-                
-
-                document.getElementById("display").appendChild(img)
-            }
-       });
-       
-    }
-
-
-   
-
-    
-
-
-    
-    </script>
-    
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>
