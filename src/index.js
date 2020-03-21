@@ -1,3 +1,6 @@
+
+
+
 var dropRegion = document.getElementById('drop-Area')
 dropRegion.addEventListener('dragenter', preventDefault, false)
 dropRegion.addEventListener('dragleave', preventDefault, false)
@@ -6,6 +9,7 @@ dropRegion.addEventListener('drop', preventDefault, false)
 dropRegion.addEventListener('drop', handleDrop, false)
 
 let imagesToBeDisplayed = []
+let imagesInLs = []
 
 function preventDefault(e) {
   e.preventDefault()
@@ -22,25 +26,50 @@ function handleFiles(files) {
     const file = files[i]
 
     imagesToBeDisplayed.push(file)
+
     displayFilename(file.name)
   }
 }
 
 function displayFilename(name) {
   const li = document.createElement('li')
+  const removeButton = document.createElement('button')
+  removeButton.innerHTML = "Remove"
   const filename = document.createTextNode(name)
   li.appendChild(filename)
 
+
   var uploadimage = document.getElementById('listimages').appendChild(li)
+  var buttonListener = document.getElementById('listimages').appendChild(removeButton)
+  console.log(imagesToBeDisplayed)
+  buttonListener.addEventListener('click', (e) => {
+    e.preventDefault()
+    removeImageFromlist(name)
+
+  })
+
+}
+
+function removeImageFromlist(name) {
+  imagesToBeDisplayed = imagesToBeDisplayed.filter(elem => {
+    return (elem.name != name)
+  })
+
+
 }
 
 function uploadButtonHandler() {
   imagesToBeDisplayed.forEach(imageFile => {
     renderImageFromFile(imageFile)
+
   })
+
 
   clearImageArray()
 }
+
+
+
 
 function clearImageArray() {
   imagesToBeDisplayed = []
@@ -52,13 +81,14 @@ function renderImageFromFile(file) {
 
   reader.readAsDataURL(file)
 
-  reader.onload = function() {
+  reader.onload = function () {
     var img = document.createElement('img')
 
     img.src = reader.result
     img.setAttribute('width', '200px')
 
     document.getElementById('display').appendChild(img)
+    console.log(Boolean(document.getElementById('display').innerHTML.length == null))
   }
 }
 
