@@ -1,20 +1,10 @@
-
-
-
-var dropRegion = document.getElementById('drop-Area')
-dropRegion.addEventListener('dragenter', preventDefault, false)
-dropRegion.addEventListener('dragleave', preventDefault, false)
-dropRegion.addEventListener('dragover', preventDefault, false)
-dropRegion.addEventListener('drop', preventDefault, false)
-dropRegion.addEventListener('drop', handleDrop, false)
-
+//state functions
 let imagesToBeDisplayed = []
 let imagesInLs = []
 
 function preventDefault(e) {
   e.preventDefault()
 }
-
 function handleDrop(e) {
   var dt = e.dataTransfer //used to get the data that is being dropped
   var files = dt.files //proprty of files is being accessed here
@@ -31,30 +21,10 @@ function handleFiles(files) {
   }
 }
 
-function displayFilename(name) {
-  const li = document.createElement('li')
-  const removeButton = document.createElement('button')
-  removeButton.innerHTML = "Remove"
-  const filename = document.createTextNode(name)
-  li.appendChild(filename)
-
-
-  var uploadimage = document.getElementById('listimages').appendChild(li)
-  var buttonListener = document.getElementById('listimages').appendChild(removeButton)
-  console.log(imagesToBeDisplayed)
-  buttonListener.addEventListener('click', (e) => {
-    e.preventDefault()
-    removeImageFromlist(name)
-
-  })
-
-}
-
 function removeImageFromlist(name) {
   imagesToBeDisplayed = imagesToBeDisplayed.filter(elem => {
     return (elem.name != name)
   })
-
 
 }
 
@@ -63,18 +33,58 @@ function uploadButtonHandler() {
     renderImageFromFile(imageFile)
 
   })
-
-
   clearImageArray()
 }
-
-
-
 
 function clearImageArray() {
   imagesToBeDisplayed = []
   document.getElementById('listimages').innerHTML = ''
 }
+
+
+
+
+
+//html functions 
+
+var dropRegion = document.getElementById('drop-Area')
+dropRegion.addEventListener('dragenter', preventDefault, false)
+dropRegion.addEventListener('dragleave', preventDefault, false)
+dropRegion.addEventListener('dragover', preventDefault, false)
+dropRegion.addEventListener('drop', preventDefault, false)
+dropRegion.addEventListener('drop', handleDrop, false)
+
+
+
+
+function displayFilename(name) {
+  const li = document.createElement('li')
+  li.id = name
+  const removeButton = document.createElement('button')
+  removeButton.innerHTML = "Remove"
+  const filename = document.createTextNode(name)
+  li.appendChild(filename)
+  li.appendChild(removeButton)
+
+
+  var uploadimage = document.getElementById('listimages').appendChild(li)
+  console.log(imagesToBeDisplayed)
+  removeButton.addEventListener('click', (e) => {
+    e.preventDefault()
+    removeImageFromlist(name)
+    removeFilenameElement(name)
+  })
+
+}
+function removeFilenameElement(name) {
+  var elementToBeremoved = document.getElementById(name)
+  console.log(elementToBeremoved)
+  elementToBeremoved.remove()
+  console.log(imagesToBeDisplayed)
+
+}
+
+
 
 function renderImageFromFile(file) {
   let reader = new FileReader() // used to read the file from the users remote system
@@ -95,3 +105,4 @@ function renderImageFromFile(file) {
 document
   .querySelector('#upload_button')
   .addEventListener('click', uploadButtonHandler)
+
