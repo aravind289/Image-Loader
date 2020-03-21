@@ -1,13 +1,3 @@
-
-
-
-var dropRegion = document.getElementById('drop-Area')
-dropRegion.addEventListener('dragenter', preventDefault, false)
-dropRegion.addEventListener('dragleave', preventDefault, false)
-dropRegion.addEventListener('dragover', preventDefault, false)
-dropRegion.addEventListener('drop', preventDefault, false)
-dropRegion.addEventListener('drop', handleDrop, false)
-
 let imagesToBeDisplayed = []
 let imagesInLs = []
 
@@ -27,9 +17,34 @@ function handleFiles(files) {
 
     imagesToBeDisplayed.push(file)
 
-    displayFilename(file.name)
+    renderFileNames(imagesToBeDisplayed)
   }
 }
+function removeImageFromlist(name) {
+  imagesToBeDisplayed = imagesToBeDisplayed.filter(elem => {
+    return (elem.name != name)
+  })
+  console.log(imagesToBeDisplayed)
+  renderFileNames(imagesToBeDisplayed)
+}
+
+function uploadButtonHandler() {
+  imagesToBeDisplayed.forEach(imageFile => {
+    renderImageFromFile(imageFile)
+
+  })
+  clearImageArray()
+}
+
+
+//html functions
+var dropRegion = document.getElementById('drop-Area')
+dropRegion.addEventListener('dragenter', preventDefault, false)
+dropRegion.addEventListener('dragleave', preventDefault, false)
+dropRegion.addEventListener('dragover', preventDefault, false)
+dropRegion.addEventListener('drop', preventDefault, false)
+dropRegion.addEventListener('drop', handleDrop, false)
+
 
 function displayFilename(name) {
   const li = document.createElement('li')
@@ -45,27 +60,17 @@ function displayFilename(name) {
   buttonListener.addEventListener('click', (e) => {
     e.preventDefault()
     removeImageFromlist(name)
-
   })
-
 }
 
-function removeImageFromlist(name) {
-  imagesToBeDisplayed = imagesToBeDisplayed.filter(elem => {
-    return (elem.name != name)
-  })
+function renderFileNames(filesToBeRendered) {
+  document.getElementById('listimages').innerHTML = ''
+  filesToBeRendered.map(item => {
 
-
-}
-
-function uploadButtonHandler() {
-  imagesToBeDisplayed.forEach(imageFile => {
-    renderImageFromFile(imageFile)
+    displayFilename(item.name)
 
   })
 
-
-  clearImageArray()
 }
 
 
@@ -95,3 +100,5 @@ function renderImageFromFile(file) {
 document
   .querySelector('#upload_button')
   .addEventListener('click', uploadButtonHandler)
+
+
