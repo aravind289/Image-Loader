@@ -94,8 +94,16 @@ function renderImageFromFile(file) {
   reader.readAsDataURL(file)
 
   reader.onload = function () {
-    imagesrcresults.push(reader.result)
+    var nameOfTheFile = file.name
+
+    let obj = {
+      name: nameOfTheFile,
+      fileSrc: reader.result
+    }
+    imagesrcresults.push(obj)
+    console.log(imagesrcresults)
     displayimage()
+    storeInls()
   }
 }
 
@@ -105,14 +113,23 @@ function displayimage() {
   imagesrcresults.map(srcitem => {
 
     var img = document.createElement('img')
-    img.src = srcitem
+    img.src = srcitem.fileSrc
     img.setAttribute('width', '200px')
+    const removeButton = document.createElement('button')
+    removeButton.innerHTML = "Remove"
 
     document.getElementById('display').appendChild(img)
-    console.log(Boolean(document.getElementById('display').innerHTML.length == null))
-    storeInls()
-
+    document.getElementById('display').appendChild(removeButton)
+    removeButton.addEventListener('click', function () {
+      imagesrcresults = imagesrcresults.filter(elem => {
+        return (elem.name != srcitem.name)
+      })
+      displayimage()
+      storeInls()
+    })
   })
+
+
 
 
 }
