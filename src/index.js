@@ -1,5 +1,5 @@
 let imagesToBeDisplayed = []
-let imagesInLs = []
+
 
 function preventDefault(e) {
   e.preventDefault()
@@ -31,7 +31,6 @@ function removeImageFromlist(name) {
 function uploadButtonHandler() {
   imagesToBeDisplayed.forEach(imageFile => {
     renderImageFromFile(imageFile)
-
   })
   clearImageArray()
 }
@@ -45,6 +44,17 @@ dropRegion.addEventListener('dragover', preventDefault, false)
 dropRegion.addEventListener('drop', preventDefault, false)
 dropRegion.addEventListener('drop', handleDrop, false)
 
+
+var imagesrcresults = [];
+
+
+if (localStorage.getItem('imagesUploaded') != null) {
+  var readLsImage = localStorage.getItem('imagesUploaded')
+  var strToArry = JSON.parse(readLsImage)
+  imagesrcresults = strToArry
+  displayimage()
+
+}
 
 function displayFilename(name) {
   const li = document.createElement('li')
@@ -73,9 +83,6 @@ function renderFileNames(filesToBeRendered) {
 
 }
 
-
-
-
 function clearImageArray() {
   imagesToBeDisplayed = []
   document.getElementById('listimages').innerHTML = ''
@@ -87,14 +94,33 @@ function renderImageFromFile(file) {
   reader.readAsDataURL(file)
 
   reader.onload = function () {
-    var img = document.createElement('img')
+    imagesrcresults.push(reader.result)
+    displayimage()
+  }
+}
 
-    img.src = reader.result
+
+function displayimage() {
+  document.getElementById('display').innerHTML = ''
+  imagesrcresults.map(srcitem => {
+
+    var img = document.createElement('img')
+    img.src = srcitem
     img.setAttribute('width', '200px')
 
     document.getElementById('display').appendChild(img)
     console.log(Boolean(document.getElementById('display').innerHTML.length == null))
-  }
+    storeInls()
+
+  })
+
+
+}
+
+
+function storeInls() {
+  var arrayToStr = JSON.stringify(imagesrcresults)
+  localStorage.setItem('imagesUploaded', arrayToStr)
 }
 
 document
