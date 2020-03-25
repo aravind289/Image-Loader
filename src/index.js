@@ -5,12 +5,16 @@ function preventDefault(e) {
   e.preventDefault()
 }
 
+
+// used for the input file 
 function handleDrop(e) {
   var dt = e.dataTransfer //used to get the data that is being dropped
   var files = dt.files //proprty of files is being accessed here
   handleFiles(files)
 }
 
+
+//as multiple file is used ...iterating through the loop and pushing it to global arrayvariable
 function handleFiles(files) {
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
@@ -20,6 +24,8 @@ function handleFiles(files) {
     renderFileNames(imagesToBeDisplayed)
   }
 }
+
+//when remove button is clicked before uploading
 function removeImageFromlist(name) {
   imagesToBeDisplayed = imagesToBeDisplayed.filter(elem => {
     return (elem.name != name)
@@ -28,6 +34,7 @@ function removeImageFromlist(name) {
   renderFileNames(imagesToBeDisplayed)
 }
 
+//when upload button is clicked.calling the function to render  image
 function uploadButtonHandler() {
   imagesToBeDisplayed.forEach(imageFile => {
     renderImageFromFile(imageFile)
@@ -47,7 +54,7 @@ dropRegion.addEventListener('drop', handleDrop, false)
 
 var imagesrcresults = [];
 
-
+//on refresh retrieving images from local storage
 if (localStorage.getItem('imagesUploaded') != null) {
   var readLsImage = localStorage.getItem('imagesUploaded')
   var strToArry = JSON.parse(readLsImage)
@@ -55,15 +62,21 @@ if (localStorage.getItem('imagesUploaded') != null) {
   displayimage()
 
 }
+//file to rendered before upload
+function renderFileNames(filesToBeRendered) {
+  document.getElementById('listimages').innerHTML = ''
+  filesToBeRendered.map(item => {
+    displayFilename(item.name)
+  })
+}
 
+//before upload listing the files choosen
 function displayFilename(name) {
   const li = document.createElement('li')
   const removeButton = document.createElement('button')
   removeButton.innerHTML = "Remove"
   const filename = document.createTextNode(name)
   li.appendChild(filename)
-
-
   var uploadimage = document.getElementById('listimages').appendChild(li)
   var buttonListener = document.getElementById('listimages').appendChild(removeButton)
   console.log(imagesToBeDisplayed)
@@ -73,21 +86,13 @@ function displayFilename(name) {
   })
 }
 
-function renderFileNames(filesToBeRendered) {
-  document.getElementById('listimages').innerHTML = ''
-  filesToBeRendered.map(item => {
-
-    displayFilename(item.name)
-
-  })
-
-}
-
+//clearing the state on re-render
 function clearImageArray() {
   imagesToBeDisplayed = []
   document.getElementById('listimages').innerHTML = ''
 }
 
+//reading the src of the image and pushing the obj created to local variable
 function renderImageFromFile(file) {
   let reader = new FileReader() // used to read the file from the users remote system
 
@@ -107,7 +112,7 @@ function renderImageFromFile(file) {
   }
 }
 
-
+//displaying image once upload is pressed
 function displayimage() {
   document.getElementById('display').innerHTML = ''
   imagesrcresults.map(srcitem => {
@@ -134,7 +139,7 @@ function displayimage() {
 
 }
 
-
+//storing imgsrc and respective name in ls
 function storeInls() {
   var arrayToStr = JSON.stringify(imagesrcresults)
   localStorage.setItem('imagesUploaded', arrayToStr)
@@ -143,5 +148,6 @@ function storeInls() {
 document
   .querySelector('#upload_button')
   .addEventListener('click', uploadButtonHandler)
+
 
 
